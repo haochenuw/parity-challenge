@@ -1,15 +1,12 @@
 {
   "indexes_for_rotation_key": [
     1,
-    2,
-    3,
-    4,
-    5
+    2
   ],
-  "ring_dimension": 32768,
+  "ring_dimension": 131072,
   "mult_depth": 29,
   "batch_size": 65536,
   "scale_mod_size": 51,
-  "first_mod_size": 9,
+  "first_mod_size": 60,
   "recaling_type": "AUTO"
 }
