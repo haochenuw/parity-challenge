@@ -8,5 +8,5 @@
   "batch_size": 65536,
   "scale_mod_size": 59,
   "first_mod_size": 60,
-  "recaling_type": "AUTO"
+  "rescaling_type": "AUTO"
 }
