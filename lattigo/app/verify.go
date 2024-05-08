@@ -11,7 +11,6 @@ import (
 	"github.com/tuneinsight/lattigo/v5/he/hefloat"
 )
 
-// go run verify.go --sk sk.bin --cc cc.bin --input in.bin --output out.bin
 func main() {
 	ccFile := flag.String("cc", "", "")
 	skFile := flag.String("sk", "", "")

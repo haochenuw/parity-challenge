@@ -11,7 +11,6 @@ import (
 	"app/utils"
 )
 
-// go run main.go --cc cc.bin --key_public pub.bin --key_eval mult.bin --input in.bin --output out.bin
 func main() {
 	ccFile := flag.String("cc", "", "")
 	evkFile := flag.String("key_eval", "", "")

@@ -12,7 +12,6 @@ import (
 	"github.com/tuneinsight/lattigo/v5/he/hefloat"
 )
 
-// go run gen_keys.go --sk sk.bin --cc cc.bin --key_public pub.bin --key_eval mult.bin --input in.bin
 func main() {
 	ccFile := flag.String("cc", "", "")
 	skFile := flag.String("sk", "", "")
@@ -39,40 +38,31 @@ func main() {
 	}
 
 	var params hefloat.Parameters
-
-	// 128-bit secure parameters enabling depth-7 circuits.
-	// LogN:14, LogQP: 431.
 	if params, err = hefloat.NewParametersFromLiteral(
 		hefloat.ParametersLiteral{
-			LogN:            paramsJSON.LogN,            // log2(ring degree)
-			LogQ:            paramsJSON.LogQ,            // log2(primes Q) (ciphertext modulus)
-			LogP:            paramsJSON.LogP,            // log2(primes P) (auxiliary modulus)
-			LogDefaultScale: paramsJSON.LogDefaultScale, // log2(scale)
+			LogN:            paramsJSON.LogN,
+			LogQ:            paramsJSON.LogQ,
+			LogP:            paramsJSON.LogP,
+			LogDefaultScale: paramsJSON.LogDefaultScale,
 		}); err != nil {
 		log.Fatalf(err.Error())
 	}
 
-	// Key Generator
 	kgen := rlwe.NewKeyGenerator(params)
 
-	// Secret Key
 	sk := kgen.GenSecretKeyNew()
 
-	// Encoder
 	ecd := hefloat.NewEncoder(params)
 
-	// Encryptor
 	enc := rlwe.NewEncryptor(params, sk)
 
 	rlk := kgen.GenRelinearizationKeyNew(sk)
 
 	evk := rlwe.NewMemEvaluationKeySet(rlk)
 
-	// Source for sampling random plaintext values (not cryptographically secure)
 	/* #nosec G404 */
 	r := rand.New(rand.NewSource(0))
 
-	// Populates the vector of plaintext values
 	values := make([]float64, params.MaxSlots())
 	for i := range values {
 		values[i] = float64(i%256) + (2*r.Float64()-1)*1e-5
@@ -80,7 +70,6 @@ func main() {
 
 	pt := hefloat.NewPlaintext(params, params.MaxLevel())
 
-	// Encodes the vector of plaintext values
 	if err = ecd.Encode(values, pt); err != nil {
 		log.Fatalf(err.Error())
 	}
