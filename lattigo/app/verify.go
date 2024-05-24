@@ -56,8 +56,8 @@ func main() {
 		want[i] = float64(int(math.Round(want[i])) & 1)
 	}
 
-	fmt.Println(have[:4])
-	fmt.Println(want[:4])
+	fmt.Println(have[:10])
+	// fmt.Println(want[:10])
 
 	fmt.Println(hefloat.GetPrecisionStats(*params, ecd, nil, have, want, 0, false).String())
 }

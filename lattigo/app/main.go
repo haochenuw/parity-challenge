@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 
 	"github.com/tuneinsight/lattigo/v5/core/rlwe"
@@ -41,4 +42,12 @@ func main() {
 	}
 
 	utils.Serialize(out, *outputFile)
+
+	fmt.Println("try deserialize")
+	out2 := new(rlwe.Ciphertext)
+	if err := utils.Deserialize(out2, *outputFile); err != nil {
+		log.Fatalf(err.Error())
+	} else {
+		fmt.Println("okok deserialize")
+	}
 }
