@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 
 	"github.com/tuneinsight/lattigo/v5/core/rlwe"
@@ -18,6 +17,7 @@ func main() {
 	inputFile := flag.String("input", "", "")
 	outputFile := flag.String("output", "", "")
 	_ = flag.String("key_public", "", "")
+	index := flag.Int("index", 0, "")
 
 	flag.Parse()
 
@@ -26,8 +26,8 @@ func main() {
 		log.Fatalf(err.Error())
 	}
 
-	evk := new(rlwe.MemEvaluationKeySet)
-	if err := utils.Deserialize(evk, *evkFile); err != nil {
+	rlk := new(rlwe.RelinearizationKey)
+	if err := utils.Deserialize(rlk, *evkFile); err != nil {
 		log.Fatalf(err.Error())
 	}
 
@@ -36,18 +36,12 @@ func main() {
 		log.Fatalf(err.Error())
 	}
 
-	out, err := solution.SolveTestcase(params, evk, in)
+	evk := rlwe.NewMemEvaluationKeySet(rlk)
+
+	out, err := solution.SolveTestcase(params, evk, in, *index)
 	if err != nil {
 		log.Fatalf("solution.SolveTestcase: %s", err.Error())
 	}
 
 	utils.Serialize(out, *outputFile)
-
-	fmt.Println("try deserialize")
-	out2 := new(rlwe.Ciphertext)
-	if err := utils.Deserialize(out2, *outputFile); err != nil {
-		log.Fatalf(err.Error())
-	} else {
-		fmt.Println("okok deserialize")
-	}
 }

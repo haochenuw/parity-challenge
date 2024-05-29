@@ -59,21 +59,22 @@ func main() {
 
 	rlk := kgen.GenRelinearizationKeyNew(sk)
 
-	evk := rlwe.NewMemEvaluationKeySet(rlk)
+	// evk := rlwe.NewMemEvaluationKeySet(rlk)
 
 	/* #nosec G404 */
 	r := rand.New(rand.NewSource(0))
 
-	fmt.Println("Max slots = ", params.MaxSlots())
-
 	values := make([]float64, params.MaxSlots())
 	for i := range values {
-		values[i] = float64(i%256) + (2*r.Float64()-1)*1e-5
+		// values[i] = float64(i%256) + (2*r.Float64()-1)*1e-5
+		values[i] = 2*r.Float64() - 1
 	}
+	fmt.Println("Values -- ", values[:10])
+
 
 	pt := hefloat.NewPlaintext(params, params.MaxLevel())
 
-	fmt.Println("Plaintext Scale with more precision", pt.Scale.Value.Text('f', -1))
+	// fmt.Println("Plaintext Scale with more precision", pt.Scale.Value.Text('f', -1))
 	// fmt.Println(pt.Scale.Value)
 	if err = ecd.Encode(values, pt); err != nil {
 		log.Fatalf(err.Error())
@@ -93,7 +94,7 @@ func main() {
 		log.Fatalf(err.Error())
 	}
 
-	if err := utils.Serialize(evk, *evalFile); err != nil {
+	if err := utils.Serialize(rlk, *evalFile); err != nil {
 		log.Fatalf(err.Error())
 	}
 

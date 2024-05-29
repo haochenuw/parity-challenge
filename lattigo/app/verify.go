@@ -53,11 +53,25 @@ func main() {
 	}
 
 	for i := range have {
-		want[i] = float64(int(math.Round(want[i])) & 1)
+		// want[i] = float64(int(math.Round(want[i])) & 1)
+		// want[i] = math.Cos(2*math.Pi*want[i])
+		want[i] = math.Max(0, want[i])
 	}
 
-	fmt.Println(have[:10])
-	// fmt.Println(want[:10])
+	fmt.Println("Have: -- ", have[:10])
+	fmt.Println("Want: -- ", want[:10])
+
+	maxDelta := 0.0
+	avgDelta := 0.0
+	for i, _ := range have {
+		delta := math.Abs(have[i] - want[i])
+		maxDelta = math.Max(delta, maxDelta)
+		avgDelta += delta
+	}
+	fmt.Println("maxDelta: -- ", maxDelta)
+	fmt.Println("avgDelta: -- ", avgDelta / float64(len(have)))
+
+
 
 	fmt.Println(hefloat.GetPrecisionStats(*params, ecd, nil, have, want, 0, false).String())
 }
